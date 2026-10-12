@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SAMPLE Story — The Phillipian</title>
+<style>
+  :root {
+    --ink: #12211e;
+    --muted: #3d524c;
+    --paper: #f6f4ef;
+    --teal: #0f3d36;
+    --mint: #e7f3ee;
+    --line: #d7e0db;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: Georgia, "Palatino Linotype", Palatino, serif;
+    line-height: 1.55;
+  }
+  .status {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    width: 100%;
+    margin: 0;
+    background: var(--teal);
+    color: #f4fffc;
+    font-family: "Segoe UI", Helvetica, Arial, sans-serif;
+    font-size: 18px;
+    font-weight: 650;
+    padding: 16px 22px;
+  }
+  .status.is-counted {
+    background: #f0c36a;
+    color: #12211e;
+    font-size: 40px;
+    font-weight: 800;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    padding: 28px 32px;
+  }
+  .status.is-counted strong {
+    font-weight: 800;
+    text-decoration: underline;
+  }
+  .mark {
+    margin: 8px 0 28px;
+    padding: 12px 14px;
+    border: 1px dashed #9bb8b0;
+    border-radius: 10px;
+    font-family: "Segoe UI", Helvetica, Arial, sans-serif;
+    font-size: 15px;
+    color: var(--teal);
+  }
+  .mark.is-counted {
+    background: #f0c36a;
+    border: 3px solid #12211e;
+    color: #12211e;
+    font-size: 32px;
+    font-weight: 800;
+    line-height: 1.2;
+    padding: 22px 20px;
+  }
+  .mark.is-counted strong {
+    font-weight: 800;
+    text-decoration: underline;
+  }
+  article {
+    max-width: 68ch;
+    margin: 0 auto;
+    padding: 36px 22px 80px;
+  }
+  .kicker {
+    font-family: "Segoe UI", Helvetica, Arial, sans-serif;
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin: 0 0 10px;
+  }
+  h1 {
+    font-size: 40px;
+    line-height: 1.1;
+    font-weight: 560;
+    margin: 0 0 12px;
+  }
+  .byline {
+    color: var(--muted);
+    margin: 0 0 28px;
+  }
+  p { font-size: 19px; margin: 0 0 18px; }
+</style>
+</head>
+<body>
+<p class="status" id="halfway-status">Scroll down. The halfway count has not happened yet.</p>
+<article>
+  <p class="kicker">SAMPLE · News</p>
+  <h1>SAMPLE Campus Reacts to the Lawsuit</h1>
+  <p class="byline">By SAMPLE Staff · The Phillipian</p>
+  <p>This is a fake story for a meeting demo. None of it ran in the paper. The page is long on purpose so a reader has to scroll before the halfway mark.</p>
+  <p>Students filled the SAMPLE common room after class and talked over one another about a case that, in this demo, does not exist. A junior said the headline was the part people recognized. A senior said the rest of the story was what decided whether they stayed.</p>
+  <p>The SAMPLE notice on the bulletin board used short sentences and a date that is not a real deadline. People stopped because the paper was blue. They did not stop because anyone on digital told them to.</p>
+  <p>In the SAMPLE dining hall, two friends split the story. One read the opening and went back to lunch. The other kept going, past the quote, past the second section, and into the part where the page gets quiet.</p>
+  <p>A faculty member in this SAMPLE scene asked what “halfway” means. It means the reader has moved past the middle of the article. It does not mean the paper knows their name.</p>
+  <p>The SAMPLE library steps were crowded at 4 p.m. Someone held a phone at arm’s length and scrolled with a thumb. The thumb paused. Then it moved again. That pause is not a count this page can see. The scroll past the middle is.</p>
+  <p>Club leaders in the SAMPLE version of this story printed three copies and left them on a table. Two copies were still there at night. One copy was folded into a backpack. Folding a paper is not the same as finishing it, and this demo does not pretend that it is.</p>
+  <p>The SAMPLE quote here is invented: “We opened it because it was the first link.” The speaker is not a real student. The sentence is here so the page has a middle to pass.</p>
+  <p>Practice after practice, the SAMPLE team in this paragraph is a placeholder. They won nothing this week because they are not a team. The paragraph exists so the article stays taller than one screen.</p>
+  <p>A SAMPLE editor reading this demo should see a line at the top change only after the middle of the story has moved up through the window. Before that, the line should keep waiting.</p>
+  <p>The weather in this SAMPLE story was ordinary. Leaves, a cold step, a door that stuck. None of that is news. It is length, and length is what the halfway check needs.</p>
+  <p>Someone asked whether the site stores a student id when the line changes. It does not. The event on this page is the word halfway and the path of the page. That is the whole message.</p>
+  <p class="mark" id="halfway-mark">Halfway mark. When this line reaches the screen, the bar at the top should change. That change is the count.</p>
+  <p>The SAMPLE closing section starts late, which is the point. If this paragraph is on screen and the top line still says waiting, the middle of the article is still below the window.</p>
+  <p>Desks in the SAMPLE newsroom of this demo hold pencils, a style sheet, and a stack of pages no one assigned. Digital does not pick the next story from this scroll. A section editor does that later, on a different day.</p>
+  <p>The last invented detail: a bell, a hallway, and a reader who either kept going or did not. This page can only mark the middle. It cannot say what the reader thought.</p>
+  <p>Keep scrolling. The bar at the top is the demo. Scroll back above this mark and it clears. Come back down and it returns.</p>
+  <p>This paragraph sits near the end so the middle of the article is not the last sentence. A reader can pass halfway and still have more of the SAMPLE story left.</p>
+  <p>If you are showing this in a meeting, leave the page up after the line changes. The event is visible without opening the console.</p>
+  <p>A SAMPLE hallway conversation continued for another flight of stairs. The people in it are not real, and the stairs are only here so the middle of the page stays below the first screen on a tall monitor.</p>
+  <p>The SAMPLE clock over the office door said 5:10. Nobody in this paragraph checked it. The sentence is ballast. Scroll is the action that matters.</p>
+  <p>Three SAMPLE notebooks sat closed on a bench. Their covers were green, blue, and a color this demo will not name, because the color is not a count and the notebooks are not sources.</p>
+  <p>Outside, a SAMPLE bus pulled away from the curb. The rider in the last row looked at a phone, then at the window, then at the phone again. This page does not know which. It only knows when the middle has passed.</p>
+  <p>The SAMPLE copy desk in this scene argued about a comma and then let it stand. That argument is invented. It takes space, which is what a halfway demo needs more of.</p>
+  <p>A reader who stops here has not reached the end. The middle of the article is higher up the page than this sentence. If the top line has already changed, the event has done its one job.</p>
+  <p>Another SAMPLE paragraph, then another, so the bottom of the story is not the halfway mark. Reaching the middle and reaching the end are different things, and this page only marks the first.</p>
+  <p>The invented weather turned colder. A coat went on. A door closed. None of those actions are events in the snippet. The snippet has one name, and it is halfway.</p>
+  <p>Near the end, the SAMPLE story repeats the rule in plain words. One scroll past the middle. One event. The page path. No name attached to it.</p>
+  <p>End of the SAMPLE story. Nothing here is a real count from phillipian.net.</p>
+</article>
+<script src="../setup/halfway.js"></script>
+<script>
+  var bar = document.getElementById("halfway-status");
+  var mark = document.getElementById("halfway-mark");
+  var barWaiting = bar.textContent;
+  var markWaiting = mark.textContent;
+
+  function showEvent(node, before, eventName, after) {
+    node.textContent = "";
+    node.appendChild(document.createTextNode(before));
+    var name = document.createElement("strong");
+    name.textContent = eventName;
+    node.appendChild(name);
+    if (after) node.appendChild(document.createTextNode(after));
+  }
+
+  window.addEventListener("halfway", function (event) {
+    var detail = event.detail;
+    showEvent(bar, "Halfway event: ", detail.event, ". Path: " + detail.path);
+    bar.classList.add("is-counted");
+    showEvent(mark, "", detail.event, " counted. One event, for this page, with no name attached.");
+    mark.classList.add("is-counted");
+  });
+
+  window.addEventListener("halfway-reset", function () {
+    bar.textContent = barWaiting;
+    bar.classList.remove("is-counted");
+    mark.textContent = markWaiting;
+    mark.classList.remove("is-counted");
+  });
+</script>
+</body>
+</html>
