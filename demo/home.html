@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SAMPLE Front — The Phillipian</title>
+<style>
+  :root {
+    --ink: #12211e;
+    --muted: #3d524c;
+    --paper: #f6f4ef;
+    --card: #ffffff;
+    --teal: #0f3d36;
+    --mint: #e7f3ee;
+    --line: #d7e0db;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: Georgia, "Palatino Linotype", Palatino, serif;
+  }
+  main {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 36px 22px 64px;
+  }
+  .kicker {
+    font-family: "Segoe UI", Helvetica, Arial, sans-serif;
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin: 0 0 10px;
+  }
+  h1 {
+    font-size: 36px;
+    line-height: 1.1;
+    font-weight: 560;
+    margin: 0 0 12px;
+  }
+  .lede {
+    font-size: 18px;
+    margin: 0 0 18px;
+  }
+  .status {
+    background: var(--mint);
+    border: 1px solid #b7ddd2;
+    border-radius: 12px;
+    padding: 14px 16px;
+    font-family: "Segoe UI", Helvetica, Arial, sans-serif;
+    font-size: 16px;
+    margin: 0 0 18px;
+  }
+  .open {
+    margin: 0 0 22px;
+  }
+  .open a {
+    font-family: "Segoe UI", Helvetica, Arial, sans-serif;
+    color: var(--teal);
+  }
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  li {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    margin: 0 0 10px;
+  }
+  li a {
+    display: block;
+    padding: 14px 16px;
+    color: var(--ink);
+    text-decoration: none;
+    font-size: 18px;
+  }
+  li a:hover { background: #f3faf7; }
+  .slot {
+    display: block;
+    font-family: "Segoe UI", Helvetica, Arial, sans-serif;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+</style>
+</head>
+<body>
+<main>
+  <p class="kicker">SAMPLE · Homepage slots</p>
+  <h1>What a click on the front records</h1>
+  <p class="lede">These links are fake. Each one carries a slot name. A click shows that slot on the page. It does not record who clicked.</p>
+  <p class="status" id="slot-status">Click a SAMPLE story. The slot name will show here.</p>
+  <p class="open" id="open-wrap" hidden>
+    <a id="open-story" href="./article.html">Open the sample story</a>
+  </p>
+  <ul>
+    <li><a href="./article.html" data-slot="lead"><span class="slot">Lead</span>SAMPLE Campus Reacts to the Lawsuit</a></li>
+    <li><a href="./article.html" data-slot="top"><span class="slot">Top stories</span>SAMPLE 10 Questions with a Teacher</a></li>
+    <li><a href="./article.html" data-slot="news"><span class="slot">News</span>SAMPLE History of Activism</a></li>
+    <li><a href="./article.html" data-slot="sports"><span class="slot">Sports</span>SAMPLE Football Beats a Rival</a></li>
+    <li><a href="./article.html" data-slot="commentary"><span class="slot">Commentary</span>SAMPLE Opinion on the Schedule</a></li>
+    <li><a href="./article.html" data-slot="arts"><span class="slot">Arts</span>SAMPLE Fall Play Opens Friday</a></li>
+  </ul>
+</main>
+<script src="../setup/slot-clicks.js"></script>
+<script>
+  var slotLabel = {
+    lead: "the lead slot",
+    top: "the top stories block",
+    news: "the news block",
+    sports: "the sports block",
+    commentary: "the commentary block",
+    arts: "the arts block"
+  };
+
+  window.addEventListener("slot_click", function (event) {
+    var detail = event.detail || {};
+    var name = slotLabel[detail.slot] || "that slot";
+    document.getElementById("slot-status").textContent =
+      "Recorded a click from " + name + ".";
+    document.getElementById("open-wrap").hidden = false;
+  });
+
+  document.addEventListener("click", function (event) {
+    var target = event.target;
+    if (!target || !target.closest) return;
+    var link = target.closest("a[data-slot]");
+    if (!link || link.id === "open-story") return;
+    event.preventDefault();
+  });
+</script>
+</body>
+</html>

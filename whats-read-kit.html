@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How the Monday note actually works — The Phillipian</title>
+<style>
+  :root {
+    --ink: #12211e;
+    --muted: #3d524c;
+    --paper: #f6f4ef;
+    --card: #ffffff;
+    --line: #d7e0db;
+    --teal: #0f3d36;
+    --teal-2: #14685c;
+    --mint: #e7f3ee;
+    --mint-edge: #b7ddd2;
+    --board: #0e221e;
+    --board-2: #122924;
+    --lane-line: rgba(232, 244, 239, 0.08);
+    --wire: #7ee0cf;
+    --loop: #f0c36a;
+    --text-on-dark: #e7f3ee;
+    --dim: #8fafa6;
+    --row: 192px;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+    line-height: 1.5;
+  }
+
+  .wrap {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 48px 28px 80px;
+  }
+
+  .kicker {
+    font-family: "Segoe UI", Helvetica, Arial, sans-serif;
+    font-size: 12px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--teal-2);
+    margin: 0 0 10px;
+  }
+
+  h1 {
+    font-weight: 560;
+    font-size: 46px;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    margin: 0 0 18px;
+    max-width: 16ch;
+  }
+
+  .lede {
+    font-size: 19px;
+    max-width: 68ch;
+    margin: 0 0 22px;
+    color: var(--ink);
+  }
+
+  .callout {
+    background: var(--mint);
+    border: 1px solid var(--mint-edge);
+    border-radius: 14px;
+    padding: 16px 18px;
+    max-width: 78ch;
+    margin: 0 0 26px;
+    font-size: 16.5px;
+  }
+  .callout strong { font-weight: 650; }
+
+  .controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 14px 22px;
+    margin-bottom: 14px;
+  }
+
+  button {
+    font-family: "Segoe UI", Helvetica, Arial, sans-serif;
+    font-size: 15px;
+    border-radius: 999px;
+    padding: 10px 18px;
+    cursor: pointer;
+  }
+  #play {
+    background: var(--teal);
+    color: #f4fffc;
+    border: 1px solid var(--teal);
+  }
+  #play:hover { background: var(--teal-2); }
+  #play[disabled] { opacity: 0.55; cursor: default; }
+  #reset {
+    background: transparent;
+    color: var(--teal);
+    border: 1px solid #9bb8b0;
+  }
+  #reset:hover { background: #fff; }
+
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px 22px;
+    margin-left: auto;
+    font-family: "Segoe UI", Helvetica, Arial, sans-serif;
+    font-size: 13px;
+    color: var(--muted);
+  }
+  .legend span { display: inline-flex; align-items: center; gap: 8px; }
+  .swatch {
+    display: inline-block;
+    width: 28px;
+    height: 0;
+    border-top: 2px solid var(--teal);
+  }
+  .swatch.dashed { border-top-style: dashed; border-top-color: #b8860b; }
+  .swatch.dotted {
+    width: 18px;
+    height: 12px;
+    border: 1.5px dotted #c4a15a;
+    border-radius: 3px;
+  }
+
+  .status {
+    min-height: 1.4em;
+    font-family: "Segoe UI", Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    color: var(--teal);
+    margin: 0 0 12px;
+  }
+
+  .board-scroll {
+    overflow-x: auto;
+    border-radius: 16px;
+    background: var(--board);
+    box-shadow: 0 18px 40px rgba(14, 34, 30, 0.18);
+  }
+
+  .board {
+    display: grid;
+    grid-template-columns: 156px minmax(0, 1fr);
+    align-items: start;
+  }
+
+  .lane-col {
+    display: grid;
+    grid-template-rows: repeat(4, var(--row));
+    border-right: 1px solid var(--lane-line);
+    background: var(--board-2);
+    padding-bottom: 36px;
+  }
+  .lane-label {
+    padding: 18px 14px 12px;
+    border-bottom: 1px solid var(--lane-line);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .lane-label:last-child { border-bottom: 0; }
+  .lane-label strong {
+    font-family: "Segoe UI", Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    font-weight: 650;
+    display: block;
+  }
+  .lane-label span {
+    font-family: "Segoe UI", Helvetica, Arial, sans-serif;
+    font-size: 12px;
+    color: var(--dim);
+    display: block;
+    margin-top: 3px;
+  }
+  .lane-label.reader strong { color: #8ee0d0; }
+  .lane-label.site strong { color: #9ecbff; }
+  .lane-label.digital strong { color: #f0c36a; }
+  .lane-label.editors strong { color: #f3b4a0; }
+
+  .stage {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(7, minmax(112px, 1fr));
+    grid-template-rows: repeat(4, var(--row));
+    min-width: 784px;
+    padding-bottom: 36px;
+    background-image: linear-gradient(to bottom, transparent calc(var(--row) - 1px), var(--lane-line) var(--row));
+    background-size: 100% var(--row);
+  }
+
+  svg.wires {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    overflow: visible;
+  }
+  svg.wires path {
+    fill: none;
+    stroke: var(--wire);
+    stroke-width: 1.6;
+    opacity: 0.28;
+    transition: opacity 0.3s ease;
+  }
+  svg.wires path.loop {
+    stroke: var(--loop);
+    stroke-dasharray: 6 6;
+    opacity: 0;
+  }
+  svg.wires path.on { opacity: 1; }
+  svg.wires path.loop.on { opacity: 1; }
+
+  .card {
+    position: relative;
+    z-index: 1;
+    margin: 14px 8px;
+    background: #14302b;
+    border: 1px solid rgba(126, 224, 207, 0.45);
+    border-radius: 12px;
+    padding: 10px 10px 8px;
+    color: var(--text-on-dark);
+    align-self: start;
+    transition: border-color 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+  }
+  .card.checkpoint {
+    border-style: dotted;
+    border-width: 1.5px;
+    border-color: rgba(240, 195, 106, 0.95);
+  }
+  .card .num {
+    font-family: "Segoe UI", Helvetica, Arial, sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    color: #04211c;
+    background: #8ee0d0;
+    width: 20px;
+    height: 20px;
+    border-radius: 6px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 6px;
+  }
+  .card.checkpoint .num { background: #f0c36a; }
+  .card h2 {
+    font-family: "Segoe UI", Helvetica, Arial, sans-serif;
+    font-size: 15px;
+    line-height: 1.25;
+    font-weight: 650;
+    margin: 0 0 4px;
+  }
+  .card p {
+    font-family: "Segoe UI", Helvetica, Arial, sans-serif;
+    font-size: 12.5px;
+    line-height: 1.35;
+    color: #c9ddd7;
+    margin: 0;
+  }
+  .pill {
+    display: inline-block;
+    margin-top: 8px;
+    font-family: "Segoe UI", Helvetica, Arial, sans-serif;
+    font-size: 11px;
+    border: 1px solid rgba(126, 224, 207, 0.45);
+    color: #b7ebe2;
+    border-radius: 999px;
+    padding: 2px 8px;
+  }
+  .card.checkpoint .pill {
+    border-color: rgba(240, 195, 106, 0.7);
+    color: #f0c36a;
+  }
+
+  .card.active {
+    background: #1a4038;
+    border-color: #d8fff6;
+    box-shadow: 0 0 0 1px #d8fff6, 0 0 24px rgba(126, 224, 207, 0.35);
+  }
+  .card.checkpoint.active {
+    border-style: dotted;
+    border-color: #f0c36a;
+    box-shadow: 0 0 0 1px #f0c36a, 0 0 24px rgba(240, 195, 106, 0.35);
+  }
+  .card.visited { border-color: rgba(126, 224, 207, 0.85); }
+  .card.checkpoint.visited { border-color: rgba(240, 195, 106, 0.95); }
+
+  .s1 { grid-column: 1; grid-row: 1; }
+  .s2 { grid-column: 2; grid-row: 2; }
+  .s3 { grid-column: 3; grid-row: 3; }
+  .s4 { grid-column: 4; grid-row: 3; }
+  .s5 { grid-column: 5; grid-row: 3; }
+  .s6 { grid-column: 6; grid-row: 3; }
+  .s7 { grid-column: 7; grid-row: 4; }
+
+  h3 {
+    font-size: 26px;
+    font-weight: 560;
+    margin: 42px 0 10px;
+    letter-spacing: -0.02em;
+  }
+  .prose { max-width: 72ch; font-size: 17.5px; }
+  .prose p { margin: 0 0 12px; }
+
+  ul.rules {
+    max-width: 72ch;
+    padding-left: 1.15em;
+    margin: 8px 0 0;
+    font-size: 17.5px;
+  }
+  ul.rules li { margin: 0 0 10px; }
+
+  .events, .path, .note {
+    display: grid;
+    gap: 12px;
+    margin-top: 12px;
+  }
+  .events { grid-template-columns: repeat(3, 1fr); }
+  .path { grid-template-columns: 1fr; max-width: 76ch; }
+  article.block {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 14px 16px;
+  }
+  article.block h4 {
+    font-family: "Segoe UI", Helvetica, Arial, sans-serif;
+    font-size: 15px;
+    margin: 0 0 6px;
+  }
+  article.block p { margin: 0; font-size: 15.5px; }
+  article.block .stepno {
+    font-family: "Segoe UI", Helvetica, Arial, sans-serif;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--teal-2);
+    margin-bottom: 4px;
+  }
+
+  .note-sheet {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 18px 20px 8px;
+    max-width: 62ch;
+    box-shadow: 0 8px 20px rgba(18, 33, 30, 0.04);
+  }
+  .note-sheet .who {
+    font-family: "Segoe UI", Helvetica, Arial, sans-serif;
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--teal-2);
+    margin: 0 0 4px;
+  }
+  .note-sheet h4 { margin: 0 0 10px; font-size: 20px; font-weight: 560; }
+  .note-sheet ol { margin: 0 0 12px; padding-left: 1.2em; font-size: 16.5px; }
+  .note-sheet li { margin: 0 0 6px; }
+  .fine {
+    font-family: "Segoe UI", Helvetica, Arial, sans-serif;
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  footer.colophon {
+    margin-top: 48px;
+    font-family: "Segoe UI", Helvetica, Arial, sans-serif;
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  @media (max-width: 860px) {
+    h1 { font-size: 36px; }
+    .events { grid-template-columns: 1fr; }
+    .legend { margin-left: 0; }
+    .wrap { padding: 32px 16px 64px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .card, svg.wires path { transition: none; }
+  }
+</style>
+</head>
+<body>
+  <main class="wrap">
+    <p class="kicker">The Phillipian · Digital</p>
+    <h1>How the Monday note actually works</h1>
+    <p class="lede">All week, readers open stories, scroll, and click. Monday morning, one person on digital turns those signals into five lines per section and sends them. Section editors read the note and decide what to cover next. Nobody on digital tells a section what to write.</p>
+
+    <div class="callout">
+      <strong>The division that matters.</strong>
+      The site only records. It logs three events and never a name. Digital only compiles. It pulls the numbers, writes five lines, and sends the note. It does not assign stories. Editors decide. A number in the note is a fact about last week, not an instruction for this week.
+    </div>
+
+    <div class="controls">
+      <button id="play" type="button">Play the flow</button>
+      <button id="reset" type="button">Reset</button>
+      <div class="legend">
+        <span><i class="swatch"></i> Main path</span>
+        <span><i class="swatch dashed"></i> Loop back</span>
+        <span><i class="swatch dotted"></i> Human checkpoint</span>
+      </div>
+    </div>
+    <p class="status" id="status" aria-live="polite"></p>
+
+    <div class="board-scroll">
+      <div class="board">
+        <div class="lane-col">
+          <div class="lane-label reader">
+            <strong>Reader</strong>
+            <span>On the site, all week</span>
+          </div>
+          <div class="lane-label site">
+            <strong>The site</strong>
+            <span>WordPress + analytics</span>
+          </div>
+          <div class="lane-label digital">
+            <strong>Digital</strong>
+            <span>One owner, Monday morning</span>
+          </div>
+          <div class="lane-label editors">
+            <strong>Section editors</strong>
+            <span>News, sports, arts, commentary</span>
+          </div>
+        </div>
+
+        <div class="stage" id="stage">
+          <svg class="wires" id="wires" aria-hidden="true"></svg>
+
+          <article class="card s1" data-step="1">
+            <div class="num">1</div>
+            <h2>Read the paper</h2>
+            <p>Open a story, scroll, or click a homepage slot.</p>
+          </article>
+
+          <article class="card s2" data-step="2">
+            <div class="num">2</div>
+            <h2>Log three events</h2>
+            <p>Open, halfway, and slot click.</p>
+            <span class="pill">3 events</span>
+          </article>
+
+          <article class="card s3" data-step="3">
+            <div class="num">3</div>
+            <h2>Pull last week</h2>
+            <p>Open the dashboard. Last Friday through Sunday.</p>
+          </article>
+
+          <article class="card s4" data-step="4">
+            <div class="num">4</div>
+            <h2>Record the Sheet</h2>
+            <p>One row per story. Copy the three counts.</p>
+          </article>
+
+          <article class="card s5" data-step="5">
+            <div class="num">5</div>
+            <h2>Write five lines</h2>
+            <p>One note per section. Opened, finished, left.</p>
+          </article>
+
+          <article class="card s6 checkpoint" data-step="6">
+            <div class="num">6</div>
+            <h2>Send the note</h2>
+            <p>A person sends it. Nothing sends itself.</p>
+            <span class="pill">Checkpoint</span>
+          </article>
+
+          <article class="card s7" data-step="7">
+            <div class="num">7</div>
+            <h2>Plan next week</h2>
+            <p>Editors choose coverage. Digital stops.</p>
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <h3>Rules the process never breaks</h3>
+    <ul class="rules">
+      <li>Only three events, and none of them identify a reader. No names, no accounts, no “who clicked.”</li>
+      <li>The note is five lines, not a dashboard. If it needs a meeting to explain, it is too long.</li>
+      <li>One owner, one send, every Monday. If that person is out, a named backup sends it. It does not slip to Tuesday.</li>
+      <li>Numbers come from the dashboard. A blank cell stays blank. Nobody rounds a feeling into a figure.</li>
+      <li>Digital does not recommend a follow-up. The note reports last week. The section decides this week.</li>
+    </ul>
+
+    <h3>The three tracked events</h3>
+    <div class="events">
+      <article class="block">
+        <h4>Article open</h4>
+        <p>A story page loaded. Tells a section which pieces people started, and which never got a click at all.</p>
+      </article>
+      <article class="block">
+        <h4>Reached halfway</h4>
+        <p>The reader passed the middle of the article. Separates a story people finished from a headline they only tapped.</p>
+      </article>
+      <article class="block">
+        <h4>Homepage slot click</h4>
+        <p>Which placement got the click: lead, top stories, or a section block. Tells digital whether the front page is doing its job.</p>
+      </article>
+    </div>
+
+    <h3>How it lands on the current site</h3>
+    <p class="prose">No new website. The Phillipian stays on WordPress. Digital does the Monday job; the webmaster does the one-time setup.</p>
+    <div class="path">
+      <article class="block">
+        <div class="stepno">Setup 1</div>
+        <h4>One tag in the theme header</h4>
+        <p>The webmaster adds a lightweight analytics snippet (Plausible or GA4) to the existing WordPress theme. It loads on every page. Digital does not edit the theme after that.</p>
+      </article>
+      <article class="block">
+        <div class="stepno">Setup 2</div>
+        <h4>A halfway listener</h4>
+        <p>A few lines of JavaScript fire one event when a reader scrolls past the middle of an article. That is the “reached halfway” count.</p>
+      </article>
+      <article class="block">
+        <div class="stepno">Setup 3</div>
+        <h4>Name the homepage slots</h4>
+        <p>Each story link on the homepage gets a <code>data-slot</code> value: lead, top, news, sports, commentary, or arts. A click records which slot it was, not who clicked.</p>
+      </article>
+      <article class="block">
+        <div class="stepno">Every Monday</div>
+        <h4>The Sheet, then the note</h4>
+        <p>A shared Google Sheet holds one tab per week, one row per story, three count columns. Digital pastes last week’s numbers, writes five lines per section, and sends the note. That send is the only step that cannot run unattended.</p>
+      </article>
+    </div>
+
+    <h3>What a section editor actually receives</h3>
+    <p class="prose">Five lines. Figures below are an example of the shape, not a real count from the site.</p>
+    <div class="note-sheet">
+      <p class="who">To News · Monday</p>
+      <h4>What got read last week</h4>
+      <ol>
+        <li>Most opened: Campus Reacts to the Cornell Lawsuit, from the lead slot.</li>
+        <li>Most finished: Andover’s Recent History of Feminist Activism. Highest share who reached halfway.</li>
+        <li>Opened and left: 10 Questions with Christopher Seeley. Clicks, then almost no one reached halfway.</li>
+        <li>The front: the lead slot drew more clicks than the news block under it.</li>
+        <li>The number to remember: readers stayed with the Cornell story. The rest is yours to assign.</li>
+      </ol>
+      <p class="fine">Sports, commentary, arts, and The Eighth Page each get their own five lines the same morning. Digital sends the note and stops.</p>
+    </div>
+
+    <h3>Where a person is required</h3>
+    <p class="prose">Steps 1 through 5 can be done from a dashboard and a Sheet. Step 6 cannot. Sending the note is the one unconditional gate: a person checks that the five lines match the Sheet, then sends. Step 7 belongs to the section editors. The loop back is what they do with it. Their assignments change next week’s stories, which changes what gets read, which is what the next Monday note measures.</p>
+
+    <footer class="colophon">A flow for The Phillipian’s digital section. It describes a Monday routine on the current WordPress site. It does not turn on analytics, edit phillipian.net, or tell a section what to cover.</footer>
+  </main>
+
+<script>
+(function () {
+  var stage = document.getElementById("stage");
+  var wires = document.getElementById("wires");
+  var status = document.getElementById("status");
+  var playBtn = document.getElementById("play");
+  var resetBtn = document.getElementById("reset");
+  var cards = Array.prototype.slice.call(stage.querySelectorAll(".card"));
+  var timers = [];
+  var playing = false;
+
+  var mainLinks = [[1, 2], [2, 3], [3, 4], [4, 5], [5, 6], [6, 7]];
+  var captions = {
+    1: "Step 1 of 7 — Readers open, scroll, and click, all week.",
+    2: "Step 2 of 7 — The site logs three events. No names.",
+    3: "Step 3 of 7 — Digital pulls last Friday through Sunday.",
+    4: "Step 4 of 7 — Counts go into the Sheet. Blank stays blank.",
+    5: "Step 5 of 7 — Five lines per section. Not a dashboard.",
+    6: "Checkpoint — a person sends the note. Nothing emails editors on its own.",
+    7: "Step 7 of 7 — Editors plan next week. Digital stops here."
+  };
+
+  function card(n) {
+    return stage.querySelector('[data-step="' + n + '"]');
+  }
+
+  function centerRight(el, box) {
+    var r = el.getBoundingClientRect();
+    return { x: r.right - box.left - 2, y: r.top + r.height / 2 - box.top };
+  }
+  function centerLeft(el, box) {
+    var r = el.getBoundingClientRect();
+    return { x: r.left - box.left + 2, y: r.top + r.height / 2 - box.top };
+  }
+
+  function curve(a, b) {
+    var gap = Math.max(8, b.x - a.x);
+    var dx = gap * 0.45;
+    return "M " + a.x + " " + a.y +
+      " C " + (a.x + dx) + " " + a.y + ", " + (b.x - dx) + " " + b.y + ", " + b.x + " " + b.y;
+  }
+
+  function draw() {
+    var box = stage.getBoundingClientRect();
+    wires.setAttribute("viewBox", "0 0 " + stage.clientWidth + " " + stage.clientHeight);
+    wires.innerHTML = "";
+
+    mainLinks.forEach(function (pair) {
+      var a = centerRight(card(pair[0]), box);
+      var b = centerLeft(card(pair[1]), box);
+      var path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+      path.setAttribute("d", curve(a, b));
+      path.setAttribute("data-link", pair[0] + "-" + pair[1]);
+      wires.appendChild(path);
+    });
+
+    var from = card(7).getBoundingClientRect();
+    var to = card(1).getBoundingClientRect();
+    var y = stage.clientHeight - 16;
+    var x7 = from.left + from.width / 2 - box.left;
+    var y7 = from.bottom - box.top;
+    var x1 = to.left + to.width / 2 - box.left;
+    var loop = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    loop.setAttribute("class", "loop");
+    loop.setAttribute("data-link", "loop");
+    loop.setAttribute("d",
+      "M " + x7 + " " + y7 +
+      " L " + x7 + " " + y +
+      " L " + (x1 + 8) + " " + y +
+      " l -8 -5 m 8 5 l -8 5"
+    );
+    wires.appendChild(loop);
+  }
+
+  function clearTimers() {
+    timers.forEach(function (t) { clearTimeout(t); });
+    timers = [];
+  }
+
+  function reset() {
+    clearTimers();
+    playing = false;
+    playBtn.disabled = false;
+    playBtn.textContent = "Play the flow";
+    cards.forEach(function (c) { c.classList.remove("active", "visited"); });
+    Array.prototype.forEach.call(wires.querySelectorAll("path"), function (p) {
+      p.classList.remove("on");
+    });
+    status.textContent = "";
+  }
+
+  function markLink(from, to) {
+    var path = wires.querySelector('[data-link="' + from + "-" + to + '"]');
+    if (path) path.classList.add("on");
+  }
+
+  function play() {
+    if (playing) return;
+    reset();
+    playing = true;
+    playBtn.disabled = true;
+    playBtn.textContent = "Playing";
+    var steps = [1, 2, 3, 4, 5, 6, 7];
+
+    steps.forEach(function (n, i) {
+      var delay = steps.slice(0, i).reduce(function (sum, step) {
+        return sum + (step === 6 ? 1600 : 850);
+      }, 400);
+      timers.push(setTimeout(function () {
+        cards.forEach(function (c) {
+          if (c.classList.contains("active")) {
+            c.classList.remove("active");
+            c.classList.add("visited");
+          }
+        });
+        card(n).classList.add("active");
+        card(n).classList.add("visited");
+        if (i > 0) markLink(steps[i - 1], n);
+        status.textContent = captions[n];
+      }, delay));
+    });
+
+    var after = steps.reduce(function (sum, step) {
+      return sum + (step === 6 ? 1600 : 850);
+    }, 400);
+    timers.push(setTimeout(function () {
+      var loop = wires.querySelector('[data-link="loop"]');
+      if (loop) loop.classList.add("on");
+      status.textContent = "Loop back — what editors assign next changes what gets read, which the next Monday note measures.";
+      playing = false;
+      playBtn.disabled = false;
+      playBtn.textContent = "Play the flow";
+    }, after + 700));
+  }
+
+  playBtn.addEventListener("click", play);
+  resetBtn.addEventListener("click", reset);
+  window.addEventListener("resize", function () {
+    if (!playing) draw();
+  });
+  draw();
+})();
+</script>
+</body>
+</html>
