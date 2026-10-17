@@ -512,17 +512,17 @@
       <article class="block">
         <div class="stepno">Setup 1</div>
         <h4>One tag in the theme header</h4>
-        <p>The webmaster adds a lightweight analytics snippet (Plausible or GA4) to the existing WordPress theme. It loads on every page. Digital does not edit the theme after that.</p>
+        <p>The webmaster adds the Plausible snippet for phillipian.net to the existing WordPress theme. It loads on every page. A pageview is the open. Digital does not edit the theme after that.</p>
       </article>
       <article class="block">
         <div class="stepno">Setup 2</div>
         <h4>A halfway listener</h4>
-        <p>A few lines of JavaScript fire one event when a reader scrolls past the middle of an article. That is the “reached halfway” count.</p>
+        <p><code>website/halfway.js</code> fires one Plausible event when a reader scrolls past the middle of the article column. That is the “reached halfway” count. The event carries the page path and nothing else.</p>
       </article>
       <article class="block">
         <div class="stepno">Setup 3</div>
-        <h4>Name the homepage slots</h4>
-        <p>Each story link on the homepage gets a <code>data-slot</code> value: lead, top, news, sports, commentary, or arts. A click records which slot it was, not who clicked.</p>
+        <h4>Read the homepage slots</h4>
+        <p><code>website/slot-clicks.js</code> reads the live front. The lead story, the top stories block, and the news, sports, commentary, and arts sections each have a slot. A click records which slot it was, not who clicked. The steps are on the install page.</p>
       </article>
       <article class="block">
         <div class="stepno">Every Monday</div>
