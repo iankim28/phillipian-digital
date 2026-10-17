@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How to put the scripts on phillipian.net — The Phillipian</title>
+<style>
+  :root {
+    --ink: #12211e;
+    --muted: #3d524c;
+    --paper: #f6f4ef;
+    --card: #ffffff;
+    --teal: #0f3d36;
+    --line: #d7e0db;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: Georgia, "Palatino Linotype", Palatino, serif;
+  }
+  main {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 36px 22px 64px;
+  }
+  .kicker {
+    font-family: "Segoe UI", Helvetica, Arial, sans-serif;
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin: 0 0 10px;
+  }
+  h1 {
+    font-size: 36px;
+    line-height: 1.1;
+    font-weight: 560;
+    margin: 0 0 12px;
+  }
+  .lede, p {
+    font-size: 18px;
+    margin: 0 0 16px;
+  }
+  a { color: var(--teal); }
+  ol {
+    margin: 0 0 22px;
+    padding-left: 1.3em;
+  }
+  li {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    margin: 0 0 10px;
+    padding: 14px 16px;
+    font-size: 18px;
+  }
+  li p { margin: 0; }
+  pre {
+    margin: 12px 0 0;
+    padding: 12px 14px;
+    background: #12211e;
+    color: #e7f3ee;
+    border-radius: 8px;
+    overflow-x: auto;
+    font-family: Consolas, "Courier New", monospace;
+    font-size: 14px;
+    line-height: 1.45;
+  }
+  code {
+    font-family: Consolas, "Courier New", monospace;
+    font-size: 0.92em;
+  }
+  .back {
+    font-family: "Segoe UI", Helvetica, Arial, sans-serif;
+    font-size: 15px;
+  }
+</style>
+</head>
+<body>
+<main>
+  <p class="kicker">The Phillipian · Digital</p>
+  <h1>How to put the scripts on phillipian.net</h1>
+  <p class="lede">A webmaster does this once. The only files that go on the site are <code>website/halfway.js</code> and <code>website/slot-clicks.js</code>. Nothing here is installed yet.</p>
+  <ol>
+    <li>
+      <p>Add the Plausible snippet for phillipian.net in the theme header, before <code>&lt;/head&gt;</code>. A pageview is the open.</p>
+      <pre>&lt;script defer data-domain="phillipian.net" src="https://plausible.io/js/script.js"&gt;&lt;/script&gt;</pre>
+    </li>
+    <li>
+      <p>In Plausible, add two custom-event goals named <code>halfway</code> and <code>slot_click</code>. The property names are <code>path</code> and <code>slot</code>. The names have to match exactly, including capitalization.</p>
+    </li>
+    <li>
+      <p>Upload <code>website/halfway.js</code> and <code>website/slot-clicks.js</code> into <code>wp-content/themes/phillipian2019/js/</code>.</p>
+    </li>
+    <li>
+      <p>In the theme footer, before <code>&lt;/body&gt;</code>, load those two files from the theme. The Plausible tag is already in the header, so it loads first.</p>
+      <pre>&lt;script src="&lt;?php echo esc_url( get_template_directory_uri() ); ?&gt;/js/halfway.js"&gt;&lt;/script&gt;
+&lt;script src="&lt;?php echo esc_url( get_template_directory_uri() ); ?&gt;/js/slot-clicks.js"&gt;&lt;/script&gt;</pre>
+    </li>
+    <li>
+      <p>Do not upload <code>archive/</code>, <code>note/</code>, or the HTML pages. They are not the live site.</p>
+    </li>
+  </ol>
+  <p>To check: open one article and scroll past the middle, then click one story on the front. In Plausible, look for the <code>halfway</code> goal and the <code>slot_click</code> goal. A goal shows nothing until it has been created and the event has fired once after that.</p>
+  <p class="back"><a href="./index.html">Back to the Monday note</a></p>
+</main>
+</body>
+</html>
