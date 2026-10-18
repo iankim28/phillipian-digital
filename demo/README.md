@@ -1,6 +1,9 @@
 # A fake front page
 
-Open `home.html` and `article.html` in a browser, or use the start page: [iankim28.github.io/phillipian-digital](https://iankim28.github.io/phillipian-digital/).
+Clicking `home.html` or `article.html` in this folder shows the code. Open the pages here:
+
+- [A fake front page](https://iankim28.github.io/phillipian-digital/demo/home.html)
+- [A fake story](https://iankim28.github.io/phillipian-digital/demo/article.html)
 
 Every story says SAMPLE. Click a story on the fake front and the page names the spot the click came from. Scroll the fake story past the middle and the bar at the top changes. That change is the halfway count. No name is attached, and these are not real numbers from the paper.
 
