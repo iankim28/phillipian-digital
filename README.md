@@ -12,16 +12,22 @@ Section editors read those lines and decide what to cover next. Digital does not
 
 Nothing in this repo is on phillipian.net yet.
 
-If you only open one link, open the start page: [iankim28.github.io/phillipian-digital](https://iankim28.github.io/phillipian-digital/). It walks through the same four things below.
+Open these as websites. Clicking an `.html` file in the file list below shows the code, not the page.
+
+- [Start here](https://iankim28.github.io/phillipian-digital/)
+- [What the Monday note is](https://iankim28.github.io/phillipian-digital/guides/how-the-monday-note-works.html)
+- [How the counts get onto the site](https://iankim28.github.io/phillipian-digital/guides/how-to-put-this-on-the-site.html) — for the webmaster
+- [A fake front page](https://iankim28.github.io/phillipian-digital/demo/home.html)
+- [A fake story](https://iankim28.github.io/phillipian-digital/demo/article.html)
 
 ## What each thing is
 
-**[index.html](index.html)** is that start page. It is a guide. It does not go on the newspaper site.
+**[Start here](https://iankim28.github.io/phillipian-digital/)** is the first page. It is a guide. It does not go on the newspaper site. The file behind it is `index.html`.
 
 **[guides/](guides/)** holds the two pages an editor can read.
 
-- [How the Monday note works](guides/how-the-monday-note-works.html) explains the week: a reader opens a story, the site counts three things, and on Monday one person writes five lines per section.
-- [How to put this on the site](guides/how-to-put-this-on-the-site.html) is for the webmaster only. Editors do not do this step.
+- [What the Monday note is](https://iankim28.github.io/phillipian-digital/guides/how-the-monday-note-works.html) explains the week: a reader opens a story, the site counts three things, and on Monday one person writes five lines per section.
+- [How the counts get onto the site](https://iankim28.github.io/phillipian-digital/guides/how-to-put-this-on-the-site.html) is for the webmaster only. Editors do not do this step.
 
 **[put-on-the-website/](put-on-the-website/)** holds the only two files that get copied onto phillipian.net.
 
@@ -32,7 +38,7 @@ They do not record a reader’s name. They do not write the five lines. An “op
 
 **[make-the-monday-note/](make-the-monday-note/)** is not the note. It is the program that writes the note. On Monday, someone saves last week’s counts as a spreadsheet and runs the program on a computer. It prints the five lines. A person checks them and sends them. This folder is never uploaded to the website, and it does not email anyone.
 
-**[demo/](demo/)** is a fake front page and a fake story. Every title says SAMPLE. Click and scroll to see what a count looks like. The numbers are made up. Do not upload this folder.
+**[demo/](demo/)** is a fake front page and a fake story. Every title says SAMPLE. Open [the fake front page](https://iankim28.github.io/phillipian-digital/demo/home.html) or [the fake story](https://iankim28.github.io/phillipian-digital/demo/article.html) and click or scroll to see what a count looks like. The numbers are made up. Do not upload this folder.
 
 ## How the webmaster puts the two files on phillipian.net
 
