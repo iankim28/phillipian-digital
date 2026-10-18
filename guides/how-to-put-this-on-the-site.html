@@ -82,7 +82,7 @@
 <main>
   <p class="kicker">The Phillipian · Digital</p>
   <h1>How to put the scripts on phillipian.net</h1>
-  <p class="lede">A webmaster does this once. The only files that go on the site are <code>website/halfway.js</code> and <code>website/slot-clicks.js</code>. Nothing here is installed yet.</p>
+  <p class="lede">This page is for the webmaster, not for section editors. It is done once. The only files that go on phillipian.net are <code>put-on-the-website/halfway.js</code> and <code>put-on-the-website/slot-clicks.js</code>. Halfway means a reader scrolled to the middle of a story. A slot is the spot on the front page the click came from. Nothing here is installed yet.</p>
   <ol>
     <li>
       <p>Add the Plausible snippet for phillipian.net in the theme header, before <code>&lt;/head&gt;</code>. A pageview is the open.</p>
@@ -92,7 +92,7 @@
       <p>In Plausible, add two custom-event goals named <code>halfway</code> and <code>slot_click</code>. The property names are <code>path</code> and <code>slot</code>. The names have to match exactly, including capitalization.</p>
     </li>
     <li>
-      <p>Upload <code>website/halfway.js</code> and <code>website/slot-clicks.js</code> into <code>wp-content/themes/phillipian2019/js/</code>.</p>
+      <p>Upload <code>put-on-the-website/halfway.js</code> and <code>put-on-the-website/slot-clicks.js</code> into <code>wp-content/themes/phillipian2019/js/</code>.</p>
     </li>
     <li>
       <p>In the theme footer, before <code>&lt;/body&gt;</code>, load those two files from the theme. The Plausible tag is already in the header, so it loads first.</p>
@@ -100,7 +100,7 @@
 &lt;script src="&lt;?php echo esc_url( get_template_directory_uri() ); ?&gt;/js/slot-clicks.js"&gt;&lt;/script&gt;</pre>
     </li>
     <li>
-      <p>Do not upload <code>archive/</code>, <code>note/</code>, or the HTML pages. They are not the live site.</p>
+      <p>Do not upload <code>guides/</code>, <code>make-the-monday-note/</code>, <code>demo/</code>, or <code>index.html</code>. Those explain the note or write the five lines. They are not the live site.</p>
     </li>
   </ol>
   <p>To check: open one article and scroll past the middle, then click one story on the front. In Plausible, look for the <code>halfway</code> goal and the <code>slot_click</code> goal. A goal shows nothing until it has been created and the event has fired once after that.</p>

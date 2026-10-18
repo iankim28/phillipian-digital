@@ -396,7 +396,7 @@
 
     <div class="callout">
       <strong>The division that matters.</strong>
-      The site only records. It logs three events and never a name. Digital only compiles. It pulls the numbers, writes five lines, and sends the note. It does not assign stories. Editors decide. A number in the note is a fact about last week, not an instruction for this week. None of this is on phillipian.net yet. The site stays unchanged until the webmaster adds the listeners.
+      The site only records. It counts three things and never a name: a story opened, a reader who reached the middle, and which spot on the front page got the click. Digital only compiles. It pulls the numbers, writes five lines, and sends the note. It does not assign stories. Editors decide. A number in the note is a fact about last week, not an instruction for this week. None of this is on phillipian.net yet. The site stays unchanged until the webmaster adds the two files in put-on-the-website.
     </div>
 
     <div class="controls">
@@ -517,12 +517,12 @@
       <article class="block">
         <div class="stepno">Setup 2</div>
         <h4>A halfway listener</h4>
-        <p><code>website/halfway.js</code> fires one Plausible event when a reader scrolls past the middle of the article column. That is the “reached halfway” count. The event carries the page path and nothing else.</p>
+        <p><code>put-on-the-website/halfway.js</code> fires one Plausible event when a reader scrolls past the middle of the article column. That is the “reached halfway” count. The event carries the page path and nothing else.</p>
       </article>
       <article class="block">
         <div class="stepno">Setup 3</div>
         <h4>Read the homepage slots</h4>
-        <p><code>website/slot-clicks.js</code> reads the live front. The lead story, the top stories block, and the news, sports, commentary, and arts sections each have a slot. A click records which slot it was, not who clicked. The steps are on the install page.</p>
+        <p><code>put-on-the-website/slot-clicks.js</code> reads the live front. The lead story, the top stories block, and the news, sports, commentary, and arts sections each have a slot. A click records which slot it was, not who clicked. The webmaster steps are on <a href="./how-to-put-this-on-the-site.html">how to put this on the site</a>.</p>
       </article>
       <article class="block">
         <div class="stepno">Every Monday</div>
