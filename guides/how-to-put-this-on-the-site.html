@@ -82,28 +82,31 @@
 <main>
   <p class="kicker">The Phillipian · Digital</p>
   <h1>How to put the scripts on phillipian.net</h1>
-  <p class="lede">This page is for the webmaster, not for section editors. It is done once. The only files that go on phillipian.net are <code>put-on-the-website/halfway.js</code> and <code>put-on-the-website/slot-clicks.js</code>. Halfway means a reader scrolled to the middle of a story. A slot is the spot on the front page the click came from. Nothing here is installed yet.</p>
+  <p class="lede">This page is for the webmaster, not for section editors. It is done once, on the Airlift staging copy first. In the WordPress dashboard, open the Airlift link. It may be labeled Airlink. That link opens the staging copy. Leave live phillipian.net alone. Do not use <code>staging.phillipian.net</code>. That address is an older WordPress install. The only files that go on the site are <code>put-on-the-website/halfway.js</code> and <code>put-on-the-website/slot-clicks.js</code>. Halfway means a reader scrolled to the middle of a story. A slot is the spot on the front page the click came from. Nothing here is installed yet. The live site changes only when the person with Airlift access merges that staging copy.</p>
   <ol>
     <li>
-      <p>Add the Plausible snippet for phillipian.net in the theme header, before <code>&lt;/head&gt;</code>. A pageview is the open.</p>
+      <p>On the staging copy, add the Plausible snippet for phillipian.net in the theme header, before <code>&lt;/head&gt;</code>. A pageview is the open.</p>
       <pre>&lt;script defer data-domain="phillipian.net" src="https://plausible.io/js/script.js"&gt;&lt;/script&gt;</pre>
     </li>
     <li>
       <p>In Plausible, add two custom-event goals named <code>halfway</code> and <code>slot_click</code>. The property names are <code>path</code> and <code>slot</code>. The names have to match exactly, including capitalization.</p>
     </li>
     <li>
-      <p>Upload <code>put-on-the-website/halfway.js</code> and <code>put-on-the-website/slot-clicks.js</code> into <code>wp-content/themes/phillipian2019/js/</code>.</p>
+      <p>Upload <code>put-on-the-website/halfway.js</code> and <code>put-on-the-website/slot-clicks.js</code> into <code>wp-content/themes/phillipian2019/js/</code> on the staging copy.</p>
     </li>
     <li>
-      <p>In the theme footer, before <code>&lt;/body&gt;</code>, load those two files from the theme. The Plausible tag is already in the header, so it loads first.</p>
+      <p>In the theme footer on the staging copy, before <code>&lt;/body&gt;</code>, load those two files from the theme. The Plausible tag is already in the header, so it loads first.</p>
       <pre>&lt;script src="&lt;?php echo esc_url( get_template_directory_uri() ); ?&gt;/js/halfway.js"&gt;&lt;/script&gt;
 &lt;script src="&lt;?php echo esc_url( get_template_directory_uri() ); ?&gt;/js/slot-clicks.js"&gt;&lt;/script&gt;</pre>
     </li>
     <li>
       <p>Do not upload <code>guides/</code>, <code>make-the-monday-note/</code>, <code>demo/</code>, or <code>index.html</code>. Those explain the note or write the five lines. They are not the live site.</p>
     </li>
+    <li>
+      <p>In Airlift, keep <code>plausible.io</code>, <code>halfway.js</code>, and <code>slot-clicks.js</code> outside JavaScript delay. Airlift can hold a script until a visitor clicks, and a held script misses the scroll and the click. Then clear the Airlift cache.</p>
+    </li>
   </ol>
-  <p>To check: open one article and scroll past the middle, then click one story on the front. In Plausible, look for the <code>halfway</code> goal and the <code>slot_click</code> goal. A goal shows nothing until it has been created and the event has fired once after that.</p>
+  <p>To check: on the staging copy, open one article and scroll past the middle, then click one story on the front. In Plausible, look for the <code>halfway</code> goal and the <code>slot_click</code> goal on the <code>phillipian.net</code> property. The tag uses that domain, so a test on staging shows up there. A goal shows nothing until it has been created and the event has fired once after that.</p>
   <p class="back"><a href="./index.html">Back to the Monday note</a></p>
 </main>
 </body>

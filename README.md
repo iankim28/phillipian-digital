@@ -42,9 +42,11 @@ They do not record a reader’s name. They do not write the five lines. An “op
 
 ## How the webmaster puts the two files on phillipian.net
 
-Do this once. Digital does not edit the theme after that.
+Do this once, on the Airlift staging copy first. In the WordPress dashboard, open the Airlift link. It may be labeled Airlink. That link opens the staging copy. Leave live phillipian.net alone. Do not use `staging.phillipian.net`. That address is an older WordPress install.
 
-1. Add the Plausible snippet for `phillipian.net` in the theme header, before `</head>`. A pageview is someone opening a story.
+Digital does not edit the theme after that. The live site changes only when the person with Airlift access merges that staging copy.
+
+1. On the staging copy, add the Plausible snippet for `phillipian.net` in the theme header, before `</head>`. A pageview is someone opening a story.
 
 ```html
 <script defer data-domain="phillipian.net" src="https://plausible.io/js/script.js"></script>
@@ -52,9 +54,9 @@ Do this once. Digital does not edit the theme after that.
 
 2. In Plausible, add two custom-event goals named `halfway` and `slot_click`. The property names are `path` and `slot`. The names have to match exactly, including capitalization.
 
-3. Upload [put-on-the-website/halfway.js](put-on-the-website/halfway.js) and [put-on-the-website/slot-clicks.js](put-on-the-website/slot-clicks.js) into `wp-content/themes/phillipian2019/js/`.
+3. Upload [put-on-the-website/halfway.js](put-on-the-website/halfway.js) and [put-on-the-website/slot-clicks.js](put-on-the-website/slot-clicks.js) into `wp-content/themes/phillipian2019/js/` on the staging copy.
 
-4. In the theme footer, before `</body>`, load those two files from the theme. The Plausible tag is already in the header, so it loads first.
+4. In the theme footer on the staging copy, before `</body>`, load those two files from the theme. The Plausible tag is already in the header, so it loads first.
 
 ```html
 <script src="<?php echo esc_url( get_template_directory_uri() ); ?>/js/halfway.js"></script>
@@ -63,7 +65,9 @@ Do this once. Digital does not edit the theme after that.
 
 5. Do not upload `guides/`, `make-the-monday-note/`, `demo/`, or `index.html`.
 
-To check: open one article and scroll past the middle, then click one story on the front. In Plausible, look for the `halfway` goal and the `slot_click` goal. A goal shows nothing until it has been created and the event has fired once after that.
+6. In Airlift, keep `plausible.io`, `halfway.js`, and `slot-clicks.js` outside JavaScript delay. Airlift can hold a script until a visitor clicks, and a held script misses the scroll and the click. Then clear the Airlift cache.
+
+To check: on the staging copy, open one article and scroll past the middle, then click one story on the front. In Plausible, look for the `halfway` goal and the `slot_click` goal on the `phillipian.net` property. The tag uses that domain, so a test on staging shows up there. A goal shows nothing until it has been created and the event has fired once after that.
 
 ## How Monday’s five lines get written
 
