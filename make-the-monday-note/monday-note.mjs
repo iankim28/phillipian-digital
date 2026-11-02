@@ -63,8 +63,7 @@ function writeNote(section, rows) {
     (row) => row.opens !== null && row.opens > 0 && row.halfway !== null,
   );
   const mostFinished = pickUnique(finishRows, shareCmp);
-  const openedAndLeft = pickOpenedAndLeft(rows, finishRows, mostFinished);
-  const front = pickFront(rows);
+  const mostLeft = pickMostLeft(finishRows);
 
   const lines = [
     `To ${section} · Monday`,
@@ -72,50 +71,25 @@ function writeNote(section, rows) {
       ? `1. Most opened: ${mostOpened.title}, from the ${mostOpened.slot} slot.`
       : `1. Most opened: ${NO_COUNT}`,
     mostFinished
-      ? `2. Most finished: ${mostFinished.title}. Highest share who reached halfway.`
+      ? `2. Most finished: ${mostFinished.title}. ${mostFinished.halfway} of ${mostFinished.opens} reached halfway.`
       : `2. Most finished: ${NO_COUNT}`,
-    openedAndLeft
-      ? `3. Opened and left: ${openedAndLeft.title}. Clicks, then almost no one reached halfway.`
-      : `3. Opened and left: ${NO_COUNT}`,
-    front
-      ? `4. The front: the ${front.leader} slot drew more clicks than the ${front.other} block.`
-      : `4. The front: ${NO_COUNT}`,
-    mostFinished
-      ? `5. The number to remember: readers stayed with ${mostFinished.title}. The rest is yours to assign.`
-      : `5. The number to remember: ${NO_COUNT}`,
+    mostLeft
+      ? `3. Most opened and left: ${mostLeft.title}. ${left(mostLeft)} of ${mostLeft.opens} left before halfway.`
+      : `3. Most opened and left: ${NO_COUNT}`,
   ];
   return lines.join("\n");
 }
 
-function pickOpenedAndLeft(rows, finishRows, mostFinished) {
-  const opens = rows
-    .map((row) => row.opens)
-    .filter((count) => count !== null);
-  if (!opens.length) return null;
-  const midpoint = median(opens);
-  const candidates = finishRows.filter((row) => {
-    if (mostFinished && row === mostFinished) return false;
-    return row.halfway * 4 < row.opens && row.opens >= midpoint;
-  });
-  return pickUnique(candidates, (a, b) => {
-    if (a.opens !== b.opens) return a.opens - b.opens;
-    return shareCmp(b, a);
-  });
+function pickMostLeft(finishRows) {
+  const best = pickUnique(
+    finishRows.filter((row) => row.halfway <= row.opens),
+    (a, b) => left(a) - left(b),
+  );
+  return best && left(best) > 0 ? best : null;
 }
 
-function pickFront(rows) {
-  const sums = new Map();
-  for (const row of rows) {
-    if (row.opens === null || !row.slot) continue;
-    sums.set(row.slot, (sums.get(row.slot) || 0) + row.opens);
-  }
-  const ranked = [...sums.entries()].sort((a, b) => b[1] - a[1]);
-  if (ranked.length < 2) return null;
-  const [leaderSlot, leaderSum] = ranked[0];
-  const [otherSlot, otherSum] = ranked[1];
-  if (leaderSum <= otherSum) return null;
-  if (ranked.length > 2 && ranked[2][1] === otherSum) return null;
-  return { leader: leaderSlot, other: otherSlot };
+function left(row) {
+  return row.opens - row.halfway;
 }
 
 function pickUnique(rows, compare) {
@@ -140,13 +114,6 @@ function shareCmp(a, b) {
   if (left > right) return 1;
   if (left < right) return -1;
   return 0;
-}
-
-function median(values) {
-  const sorted = values.slice().sort((a, b) => a - b);
-  const mid = Math.floor(sorted.length / 2);
-  if (sorted.length % 2 === 1) return sorted[mid];
-  return (sorted[mid - 1] + sorted[mid]) / 2;
 }
 
 function cell(cells, name) {

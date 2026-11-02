@@ -1,12 +1,10 @@
 # The Monday note
 
-Every Monday, each section gets five lines about last week.
+Every Monday, each section gets three lines about last week.
 
-1. Which story people opened.
+1. Which story people opened most.
 2. Which story they stayed with.
-3. Which story they opened and then left.
-4. Which spot on the front page drew more clicks.
-5. One line to remember.
+3. Which story the most readers opened and then left before halfway.
 
 Section editors read those lines and decide what to cover next. Digital does not assign stories. A number is a fact about last week, not an instruction for this week.
 
@@ -26,7 +24,7 @@ Open these as websites. Clicking an `.html` file in the file list below shows th
 
 **[guides/](guides/)** holds the two pages an editor can read.
 
-- [What the Monday note is](https://iankim28.github.io/phillipian-digital/guides/how-the-monday-note-works.html) explains the week: a reader opens a story, the site counts three things, and on Monday one person writes five lines per section.
+- [What the Monday note is](https://iankim28.github.io/phillipian-digital/guides/how-the-monday-note-works.html) explains the week: a reader opens a story, the site counts three things, and on Monday one person sends three lines per section.
 - [How the counts get onto the site](https://iankim28.github.io/phillipian-digital/guides/how-to-put-this-on-the-site.html) is for the webmaster only. Editors do not do this step.
 
 **[put-on-the-website/](put-on-the-website/)** holds the only two files that get copied onto phillipian.net.
@@ -34,9 +32,9 @@ Open these as websites. Clicking an `.html` file in the file list below shows th
 - `halfway.js` counts when a reader scrolls to the middle of a story.
 - `slot-clicks.js` counts which spot on the front page the click came from: the lead, top stories, news, sports, commentary, or arts.
 
-They do not record a reader’s name. They do not write the five lines. An “open” is just someone loading the story, and Plausible already counts that once the webmaster adds its tag.
+They do not record a reader’s name. They do not write the three lines. An “open” is just someone loading the story, and Plausible already counts that once the webmaster adds its tag.
 
-**[make-the-monday-note/](make-the-monday-note/)** is not the note. It is the program that writes the note. On Monday, someone saves last week’s counts as a spreadsheet and runs the program on a computer. It prints the five lines. A person checks them and sends them. This folder is never uploaded to the website, and it does not email anyone.
+**[make-the-monday-note/](make-the-monday-note/)** is not the note. It is the program that writes the note. On Monday, someone saves last week’s counts as a spreadsheet and runs the program on a computer. It prints the three lines. A person checks them and sends them. This folder is never uploaded to the website, and it does not email anyone.
 
 **[demo/](demo/)** is a fake front page and a fake story. Every title says SAMPLE. Open [the fake front page](https://iankim28.github.io/phillipian-digital/demo/home.html) or [the fake story](https://iankim28.github.io/phillipian-digital/demo/article.html) and click or scroll to see what a count looks like. The numbers are made up. Do not upload this folder.
 
@@ -51,6 +49,8 @@ Digital does not edit the theme after that. The live site changes only when the 
 ```html
 <script defer data-domain="phillipian.net" src="https://plausible.io/js/script.js"></script>
 ```
+
+Plausible is an outside service, not part of this repo. The snippet above uses Plausible Cloud (`plausible.io`), which is a paid subscription (about $9 a month, billed yearly) with a 30-day free trial. The whole note depends on it: opens, `halfway`, and `slot_click` all flow through Plausible, so if the trial lapses or the bill goes unpaid, the counts stop. If the paper does not want an ongoing bill, Plausible is open source and can be self-hosted for free on your own server; in that case point `src` at your own install instead of `plausible.io`.
 
 2. In Plausible, add two custom-event goals named `halfway` and `slot_click`. The property names are `path` and `slot`. The names have to match exactly, including capitalization.
 
@@ -69,7 +69,7 @@ Digital does not edit the theme after that. The live site changes only when the 
 
 To check: on the staging copy, open one article and scroll past the middle, then click one story on the front. In Plausible, look for the `halfway` goal and the `slot_click` goal on the `phillipian.net` property. The tag uses that domain, so a test on staging shows up there. A goal shows nothing until it has been created and the event has fired once after that.
 
-## How Monday’s five lines get written
+## How Monday’s three lines get written
 
 From this folder, with last week’s sheet saved as a CSV:
 
@@ -81,4 +81,4 @@ node make-the-monday-note/monday-note.mjs make-the-monday-note/sample-week.csv
 
 You get one note per section. If a line cannot be filled from the counts, it says `no count this week`. Do not fill that in by hand with a guess.
 
-Check the five lines against the sheet before anyone sends them. Sending the note is still a person, on Monday.
+Check the three lines against the sheet before anyone sends them. Sending the note is still a person, on Monday.
