@@ -87,6 +87,7 @@
     <li>
       <p>On the staging copy, add the Plausible snippet for phillipian.net in the theme header, before <code>&lt;/head&gt;</code>. A pageview is the open.</p>
       <pre>&lt;script defer data-domain="phillipian.net" src="https://plausible.io/js/script.js"&gt;&lt;/script&gt;</pre>
+      <p>Plausible is an outside service, not part of this repo. The snippet above uses Plausible Cloud (plausible.io), which is a paid subscription (about $9 a month, billed yearly) with a 30-day free trial. The whole note depends on it: opens, <code>halfway</code>, and <code>slot_click</code> all flow through Plausible, so if the trial lapses or the bill goes unpaid, the counts stop. If the paper does not want an ongoing bill, Plausible is open source and can be self-hosted for free on your own server; in that case point <code>src</code> at your own install instead of plausible.io.</p>
     </li>
     <li>
       <p>In Plausible, add two custom-event goals named <code>halfway</code> and <code>slot_click</code>. The property names are <code>path</code> and <code>slot</code>. The names have to match exactly, including capitalization.</p>
