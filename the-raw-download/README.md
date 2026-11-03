@@ -14,16 +14,29 @@ The numbers here are made up. Every story address has the word `sample` in it. N
 >
 > Every other column can be ignored.
 
-## What Plausible gives you
+## How to get the two files
 
-Plausible gives you a ZIP file named like `Plausible export phillipian.net 2026-10-26 to 2026-11-01.zip`. It holds about twenty spreadsheets. Only two have the numbers above, and this folder has those two, already unzipped.
+The Plausible dashboard has a download button. It is in the menu at the top right of the big chart, labeled **Export stats**. It gives you one ZIP file, a compressed folder, named like `Plausible export phillipian.net 2026-10-26 to 2026-11-01.zip`. Open it and you will see about twenty spreadsheets. You need only one spreadsheet from each download.
 
-You download twice. Each download gives you one of the two files you need.
+**You download twice.** Views come out right only when the dashboard shows everything. Read-to-halfway comes out right only when the dashboard shows the halfway count alone. One download can’t do both.
 
-1. **First download:** pick last week in the dashboard and download. Keep `pages.csv` from that ZIP.
-2. **Second download:** same week. Click the `halfway` goal so the dashboard shows only that count, then download again. Keep `custom_props.csv` from that ZIP.
+**Download 1: views**
 
-A goal is a named thing Plausible counts. `halfway` is the goal for a reader reaching the middle of a story. The second download needs the `halfway` goal clicked first. Without it, `custom_props.csv` mixes the halfway count with front-page clicks.
+1. Open the Plausible dashboard for phillipian.net.
+2. At the top right, set the dates to last week.
+3. Click **Export stats**.
+4. Open the ZIP. Keep **`pages.csv`**. Ignore the rest.
+
+**Download 2: read to halfway**
+
+1. Keep the same dates.
+2. Scroll down to the box called **Goal Conversions**. Click the word **`halfway`**. A filter that says `halfway` appears at the top of the page. The dashboard now shows only the halfway count.
+3. Click **Export stats** again.
+4. Open this new ZIP. Keep **`custom_props.csv`**. Ignore the rest.
+
+**Why step 2 matters.** The site sends Plausible two kinds of signal with a story’s web address on them. One means a reader reached the middle of the story. The other means someone clicked the story on the front page. `custom_props.csv` adds up signals by web address. If you skip step 2, each story’s number is halfway and front-page clicks added together, so it is too high. Plausible calls each kind of signal a goal. Clicking `halfway` narrows the file to that one goal.
+
+The two files in this folder are already unzipped, one from each download.
 
 ## pages.csv: views
 
