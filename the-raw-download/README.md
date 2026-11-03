@@ -1,34 +1,90 @@
-# What Plausible sends
+# Sample of the Plausible download
 
-This folder is a fake download. Every story address says sample. It does not go on phillipian.net.
+Plausible is the service that counts visits to phillipian.net. Each week, someone downloads last week’s numbers from Plausible. This folder shows what that download looks like.
 
-Plausible sends a ZIP of many spreadsheets. The file is named like `Plausible export phillipian.net 2026-10-26 to 2026-11-01.zip`. Two spreadsheets inside hold the counts for the Monday note. Those two are here, already taken out of the ZIP. The open and halfway numbers are the same ones in [sample-week.csv](../make-the-monday-note/sample-week.csv).
+The numbers here are made up. Every story address has the word `sample` in it. Nothing in this folder goes on phillipian.net.
 
-## pages.csv
+> [!IMPORTANT]
+> **Only two numbers matter.**
+>
+> | What you want | File | Column |
+> | --- | --- | --- |
+> | **Views:** how many times a story was loaded | `pages.csv` | **`pageviews`** |
+> | **Read to halfway:** how many times a reader scrolled past the middle of the story | `custom_props.csv` | **`events`** |
+>
+> Every other column can be ignored.
 
-This file is the first export. Leave the goal filter off.
+## What Plausible gives you
 
-One row is one page. `name` is the address. `pageviews` is the open. Copy `pageviews` into the opens column.
+Plausible gives you a ZIP file named like `Plausible export phillipian.net 2026-10-26 to 2026-11-01.zip`. It holds about twenty spreadsheets. Only two have the numbers above, and this folder has those two, already unzipped.
 
-`visitors`, `bounce_rate`, `time_on_page`, and `scroll_depth` come along in the real file. The Monday note uses `pageviews`. `scroll_depth` is an average percent of the page. The halfway count is in the other file.
+You download twice. Each download gives you one of the two files you need.
 
-A story address looks like `/2026/10/27/sample-campus-reacts-to-the-lawsuit/`. This sample also has the front page, `/`, and the news section page, `/news/`. A real `pages.csv` keeps the top 100 pages. Rows are sorted by `pageviews`, the way Plausible sorts the report.
+1. **First download:** pick last week in the dashboard and download. Keep `pages.csv` from that ZIP.
+2. **Second download:** same week. Click the `halfway` goal so the dashboard shows only that count, then download again. Keep `custom_props.csv` from that ZIP.
 
-## custom_props.csv
+A goal is a named thing Plausible counts. `halfway` is the goal for a reader reaching the middle of a story. The second download needs the `halfway` goal clicked first. Without it, `custom_props.csv` mixes the halfway count with front-page clicks.
 
-This file is the second export. Filter the dashboard to the `halfway` goal first. The rows here already have that filter. `property` is `path` on every row.
+## pages.csv: views
 
-`value` is the story address. `events` is how many times a reader reached the middle. Copy `events` into the halfway column.
+One row is one page on the site.
 
-`visitors` and `conversion_rate` come along in the real file. The Monday note uses `events`.
+| Column | What it means | Use it? |
+| --- | --- | --- |
+| `name` | The page’s web address, such as `/2026/10/27/sample-campus-reacts-to-the-lawsuit/`. Use it to tell which story the row is. | Yes, to match the story |
+| `visitors` | How many different people loaded the page. | No |
+| **`pageviews`** | **How many times the page was loaded. This is the views number.** | **Yes. This is a number to copy.** |
+| `bounce_rate` | Percent of visits that left the site from this page. | No |
+| `time_on_page` | Average seconds spent on the page. | No |
+| `scroll_depth` | Average percent of the page people scrolled. This is **not** the halfway number. | No |
 
-The front page and `/news/` are absent here. Halfway fires on a story. SAMPLE Eighth Page Photo Story has a blank count in the practice sheet, so it is absent from both files.
+Example row:
+
+```text
+name,visitors,pageviews,bounce_rate,time_on_page,scroll_depth
+/2026/10/27/sample-campus-reacts-to-the-lawsuit/,740,820,41,95,48
+```
+
+This story was loaded **820** times last week.
+
+The file also lists pages that are not stories, such as the front page (`/`) and the news section page (`/news/`). A story’s address has a date in it. A real `pages.csv` lists the top 100 pages, most viewed first.
+
+## custom_props.csv: read to halfway
+
+One row is one story. This sample is the second download, with the `halfway` goal already clicked.
+
+| Column | What it means | Use it? |
+| --- | --- | --- |
+| `property` | The kind of detail saved. Here it is always `path`, meaning the row is about one web address. | No |
+| `value` | The story’s web address. It matches `name` in `pages.csv`. | Yes, to match the story |
+| `visitors` | How many different people reached the middle. | No |
+| **`events`** | **How many times a reader scrolled past the middle of the story.** | **Yes. This is a number to copy.** |
+| `conversion_rate` | A Plausible percent for the goal. The Monday note does not use it. | No |
+
+Example row:
+
+```text
+property,value,visitors,events,conversion_rate
+path,/2026/10/27/sample-campus-reacts-to-the-lawsuit/,390,410,50.0
+```
+
+Readers got halfway through this story **410** times last week. The story was loaded 820 times, so about half the views reached the middle.
+
+The front page and `/news/` do not appear here, because the halfway count only runs on stories.
 
 ## What a person adds
 
-Section, headline, and slot are typed by a person. These files have the address and the counts. The labeled practice sheet is [sample-week.csv](../make-the-monday-note/sample-week.csv).
+Plausible knows the web address and the counts. It does not know a story’s section, headline, or spot on the front page. A person adds those.
 
-| Address | Section | Title | pageviews | events |
+The table puts each sample story’s address, section, headline, and two important numbers in one row.
+
+- **Address:** the story’s web address. It is `name` in `pages.csv` and `value` in `custom_props.csv`.
+- **Section:** News, Sports, Commentary, Arts, or The Eighth Page. Typed by a person.
+- **Headline:** the story’s title. Typed by a person.
+- **Views:** `pageviews` from `pages.csv`.
+- **Read to halfway:** `events` from `custom_props.csv`.
+
+| Address | Section | Headline | Views | Read to halfway |
 | --- | --- | --- | --- | --- |
 | `/2026/10/27/sample-campus-reacts-to-the-lawsuit/` | News | SAMPLE Campus Reacts to the Lawsuit | 820 | 410 |
 | `/2026/10/27/sample-history-of-activism/` | News | SAMPLE History of Activism | 300 | 270 |
@@ -48,4 +104,6 @@ Section, headline, and slot are typed by a person. These files have the address 
 | `/2026/10/30/sample-dance-show-recap/` | Arts | SAMPLE Dance Show Recap | 80 | 32 |
 | `/2026/10/31/sample-eighth-page-essay/` | The Eighth Page | SAMPLE Eighth Page Essay | 220 | 110 |
 
-SAMPLE Eighth Page Photo Story is on the practice sheet with both counts blank. It has no row in either file.
+One more sample story, SAMPLE Eighth Page Photo Story, has no numbers this week, so it is missing from both files. Leave a missing number blank. Do not guess.
+
+These numbers are the same ones in [sample-week.csv](../make-the-monday-note/sample-week.csv), the sheet the Monday note program reads. In that sheet, views go in the `opens` column and read-to-halfway goes in the `halfway` column.
