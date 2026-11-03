@@ -88,13 +88,33 @@
     color: var(--muted);
     margin-bottom: 4px;
   }
+  .navbar {
+    background: #111;
+    color: #fff;
+    font-family: "Segoe UI", Helvetica, Arial, sans-serif;
+    display: flex;
+    align-items: center;
+    gap: 22px;
+    padding: 14px 22px;
+  }
+  .navbar-sections-button,
+  .navbar a {
+    color: #fff;
+    font-size: 15px;
+    text-decoration: none;
+  }
+  .navbar a:hover { text-decoration: underline; }
 </style>
 </head>
 <body>
+<header class="navbar">
+  <div class="navbar-sections-button" tabindex="0" role="button"><span>Sections</span></div>
+  <div class="navbar-item"><span><a id="latest-paper" href="http://archives.phillipian.net/latest">Latest Paper</a></span></div>
+</header>
 <main>
   <p class="kicker">SAMPLE · Homepage slots</p>
   <h1>What a click on the front records</h1>
-  <p class="lede">These links are fake. Each one carries a slot name. A click shows that slot on the page. It does not record who clicked.</p>
+  <p class="lede">These links are fake. Each one carries a slot name. A click shows that slot on the page. The black bar is the header. Latest Paper is the button beside Sections. A click records that open. It does not record who clicked.</p>
   <p class="status" id="slot-status">Click a SAMPLE story. The slot name will show here.</p>
   <p class="open" id="open-wrap" hidden>
     <a id="open-story" href="./article.html">Open the sample story</a>
@@ -109,6 +129,7 @@
   </ul>
 </main>
 <script src="./setup/slot-clicks.js"></script>
+<script src="./setup/latest-paper.js"></script>
 <script>
   var slotLabel = {
     lead: "the lead slot",
@@ -127,9 +148,19 @@
     document.getElementById("open-wrap").hidden = false;
   });
 
+  window.addEventListener("latest_paper", function () {
+    document.getElementById("slot-status").textContent =
+      "Recorded an open of Latest Paper.";
+  });
+
   document.addEventListener("click", function (event) {
     var target = event.target;
     if (!target || !target.closest) return;
+    var latest = target.closest("#latest-paper");
+    if (latest) {
+      event.preventDefault();
+      return;
+    }
     var link = target.closest("a[data-slot]");
     if (!link || link.id === "open-story") return;
     event.preventDefault();

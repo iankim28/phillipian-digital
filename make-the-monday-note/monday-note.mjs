@@ -3,8 +3,9 @@ import { readFileSync } from "node:fs";
 const NO_COUNT = "no count this week";
 
 const file = process.argv[2];
+const latestFile = process.argv[3];
 if (!file) {
-  console.error("Usage: node monday-note.mjs <sheet.csv>");
+  console.error("Usage: node monday-note.mjs <sheet.csv> [latest-paper.csv]");
   process.exit(1);
 }
 
@@ -52,7 +53,13 @@ const notes = [];
 for (const [section, rows] of groups) {
   notes.push(writeNote(section, rows));
 }
-process.stdout.write(notes.join("\n\n") + (notes.length ? "\n" : ""));
+
+const latestBlock = latestFile ? writeLatestPaper(latestFile) : "";
+let output = notes.join("\n\n");
+if (latestBlock) {
+  output += (output ? "\n\n" : "") + latestBlock;
+}
+process.stdout.write(output + (output ? "\n" : ""));
 
 function writeNote(section, rows) {
   const mostOpened = pickUnique(
@@ -119,6 +126,85 @@ function shareCmp(a, b) {
 function cell(cells, name) {
   const value = cells[columns[name]];
   return value === undefined ? "" : value.trim();
+}
+
+function writeLatestPaper(filePath) {
+  let text;
+  try {
+    text = readFileSync(filePath, "utf8");
+  } catch (err) {
+    console.error(`Could not read ${filePath}: ${err.message}`);
+    process.exit(1);
+  }
+
+  const table = parseCsv(text);
+  if (!table.length) {
+    console.error("The sheet is empty.");
+    process.exit(1);
+  }
+
+  const header = table[0].map((name) => name.trim());
+  const cols = Object.fromEntries(header.map((name, index) => [name, index]));
+  for (const name of ["started", "total", "days", "this_week", "visitors"]) {
+    if (cols[name] === undefined) {
+      console.error(`Missing column: ${name}`);
+      process.exit(1);
+    }
+  }
+
+  const data = table.slice(1).find((cells) => cells.some((value) => value.trim() !== ""));
+  const started = data ? valueAt(data, cols, "started") : "";
+  const total = data ? valueAt(data, cols, "total") : "";
+  const days = data ? valueAt(data, cols, "days") : "";
+  const thisWeek = data ? valueAt(data, cols, "this_week") : "";
+  const visitors = data ? valueAt(data, cols, "visitors") : "";
+
+  return [
+    "Latest Paper",
+    sinceLine(started, total, days),
+    weekLine(thisWeek),
+    visitorsLine(visitors),
+  ].join("\n");
+}
+
+function sinceLine(started, total, days) {
+  const date = parseDate(started);
+  const opens = parseCount(total);
+  const dayCount = parseCount(days);
+  if (!date || opens === null || dayCount === null || dayCount <= 0) {
+    return `1. Since the start: ${NO_COUNT}`;
+  }
+  const average = Math.round(opens / dayCount);
+  return `1. Since ${date}: ${opens} opens, about ${average} a day.`;
+}
+
+function weekLine(value) {
+  const count = parseCount(value);
+  return count === null ? `2. This week: ${NO_COUNT}` : `2. This week: ${count} opens.`;
+}
+
+function visitorsLine(value) {
+  const count = parseCount(value);
+  return count === null ? `3. Visitors: ${NO_COUNT}` : `3. Visitors: ${count}.`;
+}
+
+function valueAt(cells, cols, name) {
+  const value = cells[cols[name]];
+  return value === undefined ? "" : value.trim();
+}
+
+function parseDate(value) {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) return null;
+  const parts = value.split("-").map(Number);
+  const date = new Date(Date.UTC(parts[0], parts[1] - 1, parts[2]));
+  if (
+    date.getUTCFullYear() !== parts[0] ||
+    date.getUTCMonth() !== parts[1] - 1 ||
+    date.getUTCDate() !== parts[2]
+  ) {
+    return null;
+  }
+  return value;
 }
 
 function parseCount(value) {
