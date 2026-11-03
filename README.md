@@ -37,6 +37,8 @@ They do not record a reader’s name. They do not write the three lines. An “o
 
 **[make-the-monday-note/](make-the-monday-note/)** is not the note. It is the program that writes the note. On Monday, someone saves last week’s counts as a spreadsheet and runs the program on a computer. It prints the three lines. A person checks them and sends them. This folder is never uploaded to the website, and it does not email anyone.
 
+**[the-raw-download/](the-raw-download/)** is a fake Plausible download. It holds the two spreadsheets that carry last week’s counts: `pages.csv` for opens and `custom_props.csv` for halfway. Every address says sample. The numbers match the practice sheet in make-the-monday-note. This folder is never uploaded to the website.
+
 **[demo/](demo/)** is a fake front page and a fake story. Every title says SAMPLE. Open [the fake front page](https://iankim28.github.io/phillipian-digital/demo/home.html) or [the fake story](https://iankim28.github.io/phillipian-digital/demo/article.html) and click or scroll to see what a count looks like. The black bar on the fake front has Latest Paper beside Sections. The numbers are made up. Do not upload this folder.
 
 ## How the webmaster puts the three files on phillipian.net
